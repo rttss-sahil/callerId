@@ -62,3 +62,10 @@ To set up and run the project:
 3. Run `docker-compose up` to start the containers defined in the `compose.yaml` file. This will set up the Node.js server and PostgreSQL database.
 4. Run `node server/scripts/migrateData.js` to populate the database with sample data.
 5. Once the setup is complete, you can access the API endpoints as described above.
+
+
+# Next Steps
+
+- Deploy using K8s
+- Refine the database, and the concept of Global Users (Users + Contacts)
+- (optional) Migrate to graph-based Db.
