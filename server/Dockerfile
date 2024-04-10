@@ -1,13 +1,14 @@
 FROM node:16-alpine AS builder
 WORKDIR /usr/src/app
-COPY package*.json ./
-RUN npm install
-RUN npm run build
 COPY . .
+RUN yarn install
+RUN yarn build
 
-FROM node:16-alpine
-WORKDIR /usr/src/app
-COPY --from=builder /usr/src/app/dist ./dist
-EXPOSE 3000
-
-CMD [ "npm", "start" ]
+FROM node:16-alpine AS final
+WORKDIR /root/
+COPY --from=builder ./usr/src/app/dist ./dist
+COPY --from=builder ./usr/src/app/scripts ./scripts
+COPY package*.json .
+COPY yarn.lock .
+RUN yarn install --production
+CMD [ "yarn", "start" ]

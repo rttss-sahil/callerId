@@ -1,14 +1,18 @@
 version: '3'
 services:
   api:
+    container_name: api
+    image: api
+    restart: always
     build:
-      context: server
+      context: ./server
       dockerfile: Dockerfile
     environment:
+      NODE_ENV: PRODUCTION
       JWT_SECRET: secret
-      DB_USER: admin
+      DB_USER: postgres
       DB_PASSWORD: mysecretpassword
-      DB_NAME: caller_id
+      DB_NAME: postgres
       DB_HOST: db
       DB_PORT: 5432
     ports:
