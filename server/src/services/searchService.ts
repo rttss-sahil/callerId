@@ -62,7 +62,12 @@ export default class SearchService {
                 `);
             } else {
                 result = await opts.context.pgClient.executeQuery(`
-                    SELECT id, name, phone_number FROM "${source}" WHERE id = ${id};
+                    SELECT u.id, u.name, u.phone_number, gu.source, COUNT(s.id) AS spam_count
+                    FROM "${source}" u
+                    LEFT JOIN global_users gu ON u.phone_number = gu.phone_number AND gu.source = '${source}'
+                    LEFT JOIN Spam s ON u.phone_number = s.phone_number
+                    WHERE u.id = ${id}
+                    GROUP BY u.id, u.name, u.phone_number, gu.source;
                 `);
             }
                 return result.rows;
