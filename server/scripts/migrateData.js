@@ -6,11 +6,11 @@ const POPULATE_NO_OF_USERS = 5;
 const POPULATE_CONTACTS_OF_USERS = 20;
 
 const pool = new Pool({
-  user: 'postgres',
-  host: 'localhost',
-  database: 'postgres',
-  password: 'mysecretpassword',
-  port: 5432,
+    user: process.env.DB_USER,
+    host: process.env.DB_HOST,
+    database: process.env.DB_NAME,
+    password: process.env.DB_PASSWORD,
+    port: parseInt(process.env.DB_PORT),
 });
 
 async function checkTablesExist() {
@@ -66,7 +66,8 @@ async function createTables() {
 
 async function createGlobalView() {
     try {
-        await onlanguagechange.query(`
+        console.log('Trying to create view.');
+        await pool.query(`
             CREATE VIEW global_users AS
             SELECT u.id, u.name, u.phone_number, u.email, 'User' AS source, 
                 (SELECT COUNT(DISTINCT marked_by_user_id) 
@@ -87,7 +88,7 @@ async function createGlobalView() {
         `)
         console.log('View created successfully.');
     } catch (error) {
-        console.error('Error whle creating view: ', eror)
+        console.error('Error whle creating view: ', error)
     }
 }
 

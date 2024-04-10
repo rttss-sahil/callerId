@@ -14,7 +14,7 @@ const PORT = 3000;
 
 app.set('env', process.env.NODE_ENV);
 
-// app.use(helmet());
+app.use(helmet());
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));

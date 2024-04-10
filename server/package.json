@@ -7,7 +7,7 @@
     "start:watch": "nodemon",
     "start": "node dist/app.js",
     "dev": "ts-node-dev --respawn app.ts",
-    "build": "tsc",
+    "build": "tsc -p .",
     "lint": "eslint src/**/*.ts",
     "format": "eslint src/**/*.ts --fix",
     "pretty": "prettier --write \"src/**/*.ts\""
