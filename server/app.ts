@@ -9,12 +9,19 @@ import searchRoutes from './src/routes/searchRoutes';
 
 import contextMiddleWare from './src/middleware/context';
 
+import loggerStream from './src/utils/logger/morgan';
+const { stderrStream, stdoutStream } = loggerStream;
+import errorHandlers from './src/utils/errorHandler';
+const { notFoundErrorHandler, unhandledRejectionHandler, uncaughtExceptionHandler, errorDecorator, finalErrorHandler } = errorHandlers;
+
 const app: Application = express();
 const PORT = 3000;
 
 app.set('env', process.env.NODE_ENV);
 
 app.use(helmet());
+
+app.use(stderrStream, stdoutStream);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -33,6 +40,18 @@ app.get('/healthcheck', async (req: Request, res: Response): Promise<Response> =
     message: 'Working fine',
   });
 });
+
+// handles 404 routes
+app.use(notFoundErrorHandler);
+
+//handles exceptions and rejections
+process.on('unhandledRejection', unhandledRejectionHandler);
+process.on('uncaughtException', uncaughtExceptionHandler);
+
+//decorate and responds to error
+app.use(errorDecorator);
+app.use(finalErrorHandler);
+
 
 try {
   app.listen(PORT, (): void => {

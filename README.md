@@ -69,3 +69,4 @@ To set up and run the project:
 - Deploy using K8s
 - Refine the database, and the concept of Global Users (Users + Contacts)
 - (optional) Migrate to graph-based Db.
+- Error Handlers And Decorators
